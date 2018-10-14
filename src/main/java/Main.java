@@ -2,6 +2,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.json.simple.JSONObject;
+
 
 public class Main {
 
@@ -48,7 +50,10 @@ public class Main {
     public static void main(String[] args) {
             String host = "http://localhost:8998";
             String data = "{'kind': 'spark'}";
-        System.out.println(executePost(host, data));
+            JSONObject json = new JSONObject();
+            json.put("kind","spark");
+        System.out.println(executePost(host+"/session",json.toString()));
+
     }
 
 }
