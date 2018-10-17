@@ -3,9 +3,16 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 public class Main {
 
-    public static String sendGet(String targetURL){
+    public static void deleteSession (String targetURL){
+
+    }
+
+    public static JSONObject sendGet(String targetURL){
         HttpURLConnection connection = null;
 
         try {
@@ -22,20 +29,22 @@ public class Main {
                 response.append(inputLine);
             }
             in.close();
-            return response.toString();
-
+            JSONParser parser = new JSONParser();
+            return (JSONObject) parser.parse(response.toString());
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } finally {
             if (connection != null) {
                 connection.disconnect();
             }
         }
-        return "no response";
+        //return "no response";
+        return null;
     }
 
     public static String executePost(String targetURL, String urlParameters) {
@@ -68,9 +77,7 @@ public class Main {
                 response.append('\r');
             }
             rd.close();
-
 //            int response = connection.getResponseCode();
-            System.out.println(response.toString().indexOf("headers"));
             return response.toString();
 //            return String.valueOf(response)
         } catch (MalformedURLException e) {
@@ -90,11 +97,25 @@ public class Main {
         JSONObject json = new JSONObject();
         json.put("kind","spark");
         JSONObject codedata = new JSONObject();
-        codedata.put("code","1+1");
+        codedata.put("code","val NUM_SAMPLES = 100000;\n" +
+                "val count = sc.parallelize(1 to NUM_SAMPLES).map { i =>\n" +
+                "val x = Math.random();\n" +
+                "val y = Math.random();\n" +
+                "if (x*x + y*y < 1) 1 else 0\n" +
+                "}.reduce(_ + _);\n" +
+                "println( 4.0 * count / NUM_SAMPLES)");
 
-        System.out.println(sendGet(host+"/sessions/0/statements"));
-        //System.out.println(executePost(host+"/sessions/0/statements",codedata.toString()));
+        executePost(host+"/sessions",json.toString());
+        
+
+        //System.out.println(sendGet(host+"/sessions/3/statements/2").get("output"));
+        //System.out.println(executePost(host+"/sessions/4/statements",codedata.toString()));
+        //System.out.println(executePost(host+"/sessions",json.toString()));
+
+
+
     }
+
 }
 
 
