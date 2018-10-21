@@ -7,13 +7,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class Main {
+public class Livy {
 
-    public static void deleteSession (String targetURL){
-
-    }
-
-    public static JSONObject sendGet(String targetURL){
+    public  JSONObject sendGet(String targetURL){
         HttpURLConnection connection = null;
 
         try {
@@ -48,7 +44,7 @@ public class Main {
         return null;
     }
 
-    public static String executePost(String targetURL, String urlParameters) {
+    public  String executePost(String targetURL, String urlParameters) {
         HttpURLConnection connection = null;
 
         try {
@@ -93,7 +89,7 @@ public class Main {
         return "no response";
     }
 
-    private static JSONObject searchJSON (JSONObject object){
+    public JSONObject searchJSON (JSONObject object){
 
         JSONArray childObject = (JSONArray) object.get("statements");
         JSONObject outputObject = (JSONObject) childObject.get(0);
@@ -105,27 +101,27 @@ public class Main {
 
     }
     public static void main(String[] args) {
-        String host = "http://localhost:8998";
-        JSONObject json = new JSONObject();
-        json.put("kind","spark");
-        JSONObject codedata = new JSONObject();
-        codedata.put("code","val NUM_SAMPLES = 100000;\n" +
-                "val count = sc.parallelize(1 to NUM_SAMPLES).map { i =>\n" +
-                "val x = Math.random();\n" +
-                "val y = Math.random();\n" +
-                "if (x*x + y*y < 1) 1 else 0\n" +
-                "}.reduce(_ + _);\n" +
-                "println( 4.0 * count / NUM_SAMPLES)");
-
-        //executePost(host+"/sessions",json.toString());
-        //send code
-        //System.out.println(executePost(host+"/sessions/1/statements",codedata.toString()));
-        JSONObject result =  sendGet(host+"/sessions/1/statements");
-        System.out.println(result.toJSONString());
-        System.out.println(searchJSON(result));
-
-        //System.out.println(sendGet(host+"/sessions/3/statements/2").get("output"));
-       //System.out.println(executePost(host+"/sessions",json.toString()));
+//        String host = "http://localhost:8998";
+//        JSONObject json = new JSONObject();
+//        json.put("kind","spark");
+//        JSONObject codedata = new JSONObject();
+//        codedata.put("code","val NUM_SAMPLES = 100000;\n" +
+//                "val count = sc.parallelize(1 to NUM_SAMPLES).map { i =>\n" +
+//                "val x = Math.random();\n" +
+//                "val y = Math.random();\n" +
+//                "if (x*x + y*y < 1) 1 else 0\n" +
+//                "}.reduce(_ + _);\n" +
+//                "println( 4.0 * count / NUM_SAMPLES)");
+//
+//        //executePost(host+"/sessions",json.toString());
+//        //send code
+//        //System.out.println(executePost(host+"/sessions/1/statements",codedata.toString()));
+//        JSONObject result =  sendGet(host+"/sessions/1/statements");
+//        System.out.println(result.toJSONString());
+//        System.out.println(searchJSON(result));
+//
+//        //System.out.println(sendGet(host+"/sessions/3/statements/2").get("output"));
+//       //System.out.println(executePost(host+"/sessions",json.toString()));
     }
 
 }
