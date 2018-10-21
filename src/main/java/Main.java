@@ -2,6 +2,9 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -91,9 +94,20 @@ public class Main {
         }
         return "no response";
     }
+
+    private static JSONObject searchJSON (JSONObject object){
+
+        JSONArray childObject = (JSONArray) object.get("statements");
+        JSONObject outputObject = (JSONObject) childObject.get(0);
+        JSONObject out2Object = (JSONObject) outputObject.get("output");
+        JSONObject dataObject = (JSONObject) out2Object.get("data");
+        System.out.println("HII "+dataObject.toJSONString());
+        return dataObject;
+
+
+    }
     public static void main(String[] args) {
         String host = "http://localhost:8998";
-        String data = "{'kind': 'spark'}";
         JSONObject json = new JSONObject();
         json.put("kind","spark");
         JSONObject codedata = new JSONObject();
@@ -105,15 +119,15 @@ public class Main {
                 "}.reduce(_ + _);\n" +
                 "println( 4.0 * count / NUM_SAMPLES)");
 
-        executePost(host+"/sessions",json.toString());
-        
+        //executePost(host+"/sessions",json.toString());
+        //send code
+        //System.out.println(executePost(host+"/sessions/1/statements",codedata.toString()));
+        JSONObject result =  sendGet(host+"/sessions/1/statements");
+        System.out.println(result.toJSONString());
+        System.out.println(searchJSON(result));
 
         //System.out.println(sendGet(host+"/sessions/3/statements/2").get("output"));
-        //System.out.println(executePost(host+"/sessions/4/statements",codedata.toString()));
-        //System.out.println(executePost(host+"/sessions",json.toString()));
-
-
-
+       //System.out.println(executePost(host+"/sessions",json.toString()));
     }
 
 }
