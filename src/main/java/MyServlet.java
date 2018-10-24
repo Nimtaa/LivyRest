@@ -19,6 +19,12 @@ public class MyServlet extends HttpServlet {
         String host = "http://localhost:8998";
         JSONObject json = new JSONObject();
         json.put("kind","spark");
+
+        JSONObject batchParam = new JSONObject();
+        batchParam.put("file","/home/nima/IdeaProjects/sparkTestApp/out/artifacts/sparkTestApp_jar/sparkTestApp.jar");
+        batchParam.put("className","StreamTest");
+
+
         JSONObject codedata = new JSONObject();
         codedata.put("code","val NUM_SAMPLES = 100000;\n" +
                 "val count = sc.parallelize(1 to NUM_SAMPLES).map { i =>\n" +
@@ -31,13 +37,18 @@ public class MyServlet extends HttpServlet {
         streamcode.put("code","import org.apache.spark.streaming._\n" +
                 " import org.apache.spark.streaming.StreamingContext._\n" +
                 "val ssc = new StreamingContext(sc,Seconds(5));\n" +
-                "val lines = ssc.socketTextStream(\"localhost\",9998);\n" +
-                "lines.print()\n" +
+                "val lines = ssc.socketTextStream(\"127.0.0.1\",9998);\n" +
+                "val words = lines.flatMap(_.split(\"\\n\"))\n" +
+                "println(words.print())\n" +
                 "ssc.start()\n" +
                 "ssc.awaitTermination()");
 
+
+        //create Batch
+//        System.out.println(livyInstance.executePost(host+"/batches",batchParam.toString()));
+//        livyInstance.sendGet(host+"/batches");
         //create session
-//        livyInstance.executePost(host+"/sessions",json.toString());
+        livyInstance.executePost(host+"/sessions",json.toString());
 //
 //        resp.getWriter().write("waiting");
 //        try {
@@ -45,14 +56,15 @@ public class MyServlet extends HttpServlet {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
+//        livyInstance.deleteSession(host+"/sessions/6");
 
-//        System.out.println(livyInstance.executePost(host+"/sessions/4/statements",streamcode.toString()));
+//        System.out.println(livyInstance.executePost(host+"/sessions/7/statements",streamcode.toString()));
 //        try {
 //            TimeUnit.SECONDS.sleep(5);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-//        JSONObject result =  livyInstance.sendGet(host+"/sessions/4/statements");
+//        JSONObject result =  livyInstance.sendGet(host+"/sessions/7/statements");
 //        System.out.println(result.toJSONString());
 //        resp.setStatus(HttpStatus.OK_200);
 //        resp.getWriter().print(livyInstance.searchJSON(result));
