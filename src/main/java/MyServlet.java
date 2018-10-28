@@ -21,7 +21,7 @@ public class MyServlet extends HttpServlet {
         json.put("kind","spark");
 
         JSONObject batchParam = new JSONObject();
-        batchParam.put("file","/home/nima/IdeaProjects/sparkTestApp/out/artifacts/sparkTestApp_jar/sparkTestApp.jar");
+        batchParam.put("file","/home/nima/IdeaProjects/LivyAppTest/out/artifacts/LivyAppTest_jar/LivyAppTest.jar");
         batchParam.put("className","StreamTest");
 
 
@@ -44,13 +44,14 @@ public class MyServlet extends HttpServlet {
                 "ssc.awaitTermination()");
 
 
+//        livyInstance.deleteSession(host+"/batches/0");
         //create Batch
-//        System.out.println(livyInstance.executePost(host+"/batches",batchParam.toString()));
+        System.out.println(livyInstance.executePost(host+"/batches",batchParam.toString()));
 //        livyInstance.sendGet(host+"/batches");
         //create session
-        livyInstance.executePost(host+"/sessions",json.toString());
+      //  livyInstance.executePost(host+"/sessions",json.toString());
 //
-//        resp.getWriter().write("waiting");
+//        resp.getWriter().write("waidting");
 //        try {
 //            TimeUnit.SECONDS.sleep(30);
 //        } catch (InterruptedException e) {
