@@ -39,6 +39,8 @@ public class MyServlet extends HttpServlet {
         //create Batch
         System.out.println(livyInstance.executePost(host+"/batches",batchParam.toString()));
 
+
+
     }
 }
 
